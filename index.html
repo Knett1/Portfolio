@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>K_nett — Auras & VFX d’ambiance Roblox</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f3f1fa;--surface:#ffffff;--text:#1b1830;--muted:#5f5b78;--line:#d9d5ea;
+  --accent:#e0264a;--key:#d98e00;--on-accent:#ffffff;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#15131f;--surface:#1f1c2e;--text:#f1eefc;--muted:#a29fb8;--line:#332f49;
+    --accent:#ff4f6d;--key:#ffc94a;--on-accent:#ffffff;color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15131f;--surface:#1f1c2e;--text:#f1eefc;--muted:#a29fb8;--line:#332f49;
+  --accent:#ff4f6d;--key:#ffc94a;--on-accent:#ffffff;color-scheme:dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:400 1rem/1.6 "Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:0 1.25rem}
+h1,h2,h3{font-family:"Bricolage Grotesque","Instrument Sans",system-ui,sans-serif;margin:0;line-height:1.05}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+/* Hero */
+.hero{padding:clamp(2.5rem,8vw,5.5rem) 0 1rem}
+.name{font-size:clamp(3.6rem,17vw,10rem);font-weight:800;letter-spacing:-.04em}
+.tagline{font:500 clamp(1.15rem,3vw,1.6rem)/1.3 "Bricolage Grotesque",sans-serif;margin:.6rem 0 0}
+.intro{max-width:56ch;color:var(--muted);margin:1rem 0 0}
+
+/* Timeline façon Animation Editor */
+.tl{position:relative;height:60px;margin:2.5rem 0 2rem;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.tl::before{content:"";position:absolute;inset:0 0 auto 0;height:10px;
+  background:repeating-linear-gradient(90deg,var(--line) 0 1px,transparent 1px 2%)}
+.kf{position:absolute;top:34px;width:11px;height:11px;margin-left:-5px;background:var(--key);transform:rotate(45deg)}
+.mk{position:absolute;top:0;bottom:0;left:62%;width:2px;background:var(--key);opacity:.55}
+.mk span{position:absolute;top:12px;left:8px;font-size:.8rem;color:var(--muted)}
+.ph{position:absolute;top:-1px;bottom:-1px;left:62%;width:2px;background:var(--accent);animation:sweep 1.5s cubic-bezier(.6,.1,.2,1) both}
+.ph::before{content:"";position:absolute;top:-1px;left:-5px;border:6px solid transparent;border-top-color:var(--accent);border-bottom:0}
+.mk{animation:hit .5s 1.5s both}
+@keyframes sweep{from{left:0}to{left:62%}}
+@keyframes hit{0%{opacity:.55}30%{opacity:1;box-shadow:0 0 18px 4px var(--key)}100%{opacity:.55;box-shadow:none}}
+@media (prefers-reduced-motion:reduce){.ph,.mk{animation:none}}
+
+/* Vignettes vidéo */
+.thumb{position:relative;display:block;width:100%;aspect-ratio:16/9;padding:0;border:0;border-radius:6px;overflow:hidden;
+  background:linear-gradient(135deg,hsl(var(--h,270) 55% 30%),hsl(calc(var(--h,270) + 40) 60% 17%));color:#fff;font:inherit}
+button.thumb{cursor:pointer}
+.thumb img,.thumb video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.thumb video{pointer-events:none}
+.play{position:absolute;left:50%;top:50%;width:60px;height:60px;margin:-30px 0 0 -30px;border-radius:50%;background:var(--accent);transition:transform .15s}
+.play::before{content:"";position:absolute;left:24px;top:18px;border:12px solid transparent;border-left:19px solid var(--on-accent);border-right:0}
+button.thumb:hover .play{transform:scale(1.12)}
+.big .play{width:84px;height:84px;margin:-42px 0 0 -42px}
+.big .play::before{left:34px;top:26px;border-width:16px;border-left-width:26px;border-right:0}
+.soon{position:absolute;left:1rem;bottom:.8rem;font-weight:600;opacity:.85}
+.reel{margin-top:.5rem}
+.cap{margin:.6rem 0 0;color:var(--muted);font-size:.95rem}
+
+/* Sections */
+section{padding:clamp(2.5rem,7vw,4.5rem) 0 0}
+h2{font-size:clamp(1.8rem,5vw,2.6rem);font-weight:800;letter-spacing:-.02em}
+.filters{display:flex;flex-wrap:wrap;gap:.5rem;margin:1.2rem 0 1.6rem}
+.filters button{font:500 .95rem "Instrument Sans",sans-serif;color:var(--text);background:transparent;border:1px solid var(--line);
+  border-radius:999px;padding:.35rem .95rem;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--text);color:var(--bg);border-color:var(--text)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:2rem 1.5rem}
+.card h3{font-size:1.3rem;font-weight:800;margin:.8rem 0 .2rem;letter-spacing:-.01em}
+.card p{margin:.15rem 0}
+.role{font-weight:600;font-size:.95rem}
+.desc{color:var(--muted);font-size:.95rem}
+.tags{color:var(--key);font-size:.9rem;font-weight:600}
+.services{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:1.5rem;margin-top:1.5rem}
+.services div{border-top:2px solid var(--text);padding-top:.8rem}
+.services h3{font-size:1.2rem;font-weight:800;margin-bottom:.4rem}
+.services p{margin:0;color:var(--muted)}
+.contact{display:flex;flex-wrap:wrap;gap:.7rem 1.6rem;margin-top:1.2rem}
+.contact a,.contact button{font:800 clamp(1.3rem,4vw,1.9rem)/1.2 "Bricolage Grotesque",sans-serif;color:var(--text);background:none;border:0;padding:0;
+  cursor:pointer;text-decoration:underline;text-decoration-color:var(--accent);text-decoration-thickness:3px;text-underline-offset:5px}
+.muted{color:var(--muted)}
+.contact button.dc{display:flex;flex-direction:column;align-items:flex-start;gap:.15rem;padding:.8rem 1.4rem;background:var(--surface);border:2px solid var(--accent);border-radius:10px;text-decoration:none}
+.dc .dl{font:500 .85rem "Instrument Sans",sans-serif;color:var(--muted)}
+.dc .dh{font:800 clamp(1.5rem,5vw,2.1rem)/1.1 "Bricolage Grotesque",sans-serif;color:var(--text)}
+footer{padding:4rem 0 2.5rem;color:var(--muted);font-size:.9rem}
+
+/* Lecteur */
+.ov{position:fixed;inset:0;z-index:20;background:rgba(8,6,14,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:.9rem;padding:calc(1rem + env(safe-area-inset-top,0px)) 1rem calc(1rem + env(safe-area-inset-bottom,0px))}
+.ov[hidden]{display:none}
+.ov .box{width:min(100%,1100px);aspect-ratio:16/9;background:#000;border-radius:6px;overflow:hidden}
+.ov iframe{width:100%;height:100%;border:0}
+.ov .bar{display:flex;gap:1.2rem;align-items:center;color:#fff}
+.ov .bar a,.ov .bar button{color:#fff;font:500 1rem "Instrument Sans",sans-serif;background:none;border:1px solid #ffffff55;border-radius:999px;padding:.4rem 1rem;cursor:pointer;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <h1 class="name" id="name">K_nett</h1>
+    <p class="tagline" id="tagline"></p>
+    <p class="intro" id="intro"></p>
+    <div class="tl" aria-hidden="true">
+      <span class="kf" style="left:4%"></span><span class="kf" style="left:15%"></span><span class="kf" style="left:28%"></span>
+      <span class="kf" style="left:43%"></span><span class="kf" style="left:55%"></span><span class="kf" style="left:62%"></span>
+      <span class="kf" style="left:79%"></span><span class="kf" style="left:92%"></span>
+      <div class="mk"><span>Aura</span></div><div class="ph"></div>
+    </div>
+    
+    
+  </header>
+
+  <section id="projets">
+    <h2>Projets</h2>
+    <div class="filters" id="filters"></div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section id="services">
+    <h2>Ce que je fais</h2>
+    <div class="services" id="services"></div>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <div class="contact" id="contact"></div>
+  </section>
+
+  <footer>© <span id="year"></span> K_nett</footer>
+</div>
+
+<div class="ov" id="ov" hidden role="dialog" aria-modal="true" aria-label="Lecteur vidéo">
+  <div class="box"><iframe id="player" title="Vidéo" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+  <div class="bar"><a id="yt" href="#" target="_blank" rel="noopener">Vidéo bloquée ? Ouvrir dans un nouvel onglet</a><button type="button" id="close">Fermer</button></div>
+</div>
+
+<script>
+/* ============================================================
+   COMMENT AJOUTER UNE VIDÉO
+   Copie un bloc { ... }, colle-le dans PROJECTS, change le lien YouTube.
+   Liens acceptés : youtube.com/watch?v=..., youtu.be/..., youtube.com/shorts/...
+   Vidéo sur ton PC : mets le fichier dans un dossier "videos" à côté de ce fichier, puis url: "videos/mon-clip.mp4"
+   Tant que "url" est vide, la carte affiche « Vidéo à venir ».
+   ============================================================ */
+const CONFIG = {
+  tagline: "Auras & VFX d’ambiance pour Roblox",
+  intro: "Je crée des auras de personnage et des ambiances pour Roblox, avec des particules, de la lumière et du post-traitement.",
+  
+  contact: { discord: "@K_nett", youtube: "", twitter: "", devforum: "", email: "" }  // remplis ce que tu veux afficher
+};
+
+const PROJECTS = [
+  {
+  title: "Halloween",
+  url: "videos/halloween.mp4",
+  tags: ["Ambiance"],
+  desc: "Showcase d’ambiance d’Halloween."
+  },
+  // Medal fonctionne aussi : colle le lien du clip tel quel.
+  // Modèle à copier pour chaque vidéo (tags conseillés : Aura, Ambiance, VFX, Combat) :
+  // Vidéo locale : { title: "…", url: "videos/mon-clip.mp4", tags: ["Aura"], desc: "…" },
+  // { title: "…", url: "https://youtu.be/…", tags: ["Aura"], role: "…", desc: "…" },
+];
+
+const SERVICES = [
+  { t: "Auras", d: "Auras personnalisées et à votre guise. Elles sont travaillées à fond pour avoir le meilleur rendu." },
+  { t: "Ambiances", d: "Brouillard, poussière en suspension, lucioles, lumière et post-traitement pour donner une atmosphère à un lieu." },
+  { t: "Combat", d: "VFX de combat synchronisés avec du son et des changements d’environnement. (Je ne fais pas les animations pour le moment.)" }
+];
+
+/* ---------- Code de la page (rien à modifier en dessous) ---------- */
+function el(tag, cls, txt) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (txt != null) e.textContent = txt;
+  return e;
+}
+function media(u) {
+  u = u || "";
+  if (/\.(mp4|webm|ogv|mov|m4v)(\?.*)?$/i.test(u)) return { src: u, thumb: null };
+  let m = u.match(/(?:youtu\.be\/|[?&]v=|shorts\/|embed\/)([\w-]{11})/);
+  if (m) return { id: m[1], thumb: "https://img.youtube.com/vi/" + m[1] + "/hqdefault.jpg",
+    embed: "https://www.youtube-nocookie.com/embed/" + m[1] + "?autoplay=1&rel=0",
+    watch: "https://www.youtube.com/watch?v=" + m[1] };
+  m = u.match(/medal\.tv\/(?:([a-z]{2})\/)?games\/([\w-]+)\/clips?\/([\w-]+)/);
+  if (m) {
+    const inv = u.match(/[?&]invite=([\w-]+)/);
+    return { id: m[3], thumb: null,
+      embed: "https://medal.tv/" + (m[1] || "fr") + "/games/" + m[2] + "/clip/" + m[3] + "?" + (inv ? "invite=" + inv[1] + "&" : "") + "autoplay=1" };
+  }
+  m = u.match(/medal\.tv\/(?:[a-z]{2}\/)?clips?\/([\w-]+)/);
+  if (m) return { id: m[1], thumb: null, embed: "https://medal.tv/fr/clip/" + m[1] + "?autoplay=1" };
+  return null;
+}
+const ov = document.getElementById("ov"), player = document.getElementById("player");
+const box = document.querySelector(".ov .box"), ytLink = document.getElementById("yt");
+let vid = null;
+function openPlayer(m, title, url) {
+  if (m.src) {
+    player.hidden = true;
+    vid = el("video");
+    vid.src = m.src; vid.controls = true; vid.autoplay = true; vid.playsInline = true;
+    vid.style.cssText = "width:100%;height:100%;background:#000";
+    box.append(vid);
+    ytLink.hidden = true;
+  } else {
+    player.hidden = false;
+    player.title = title;
+    player.src = m.embed;
+    ytLink.href = url;
+    ytLink.hidden = false;
+  }
+  ov.hidden = false;
+  document.getElementById("close").focus();
+}
+function closePlayer() {
+  ov.hidden = true;
+  player.src = "about:blank";
+  if (vid) { vid.pause(); vid.remove(); vid = null; }
+}
+document.getElementById("close").onclick = closePlayer;
+ov.addEventListener("click", e => { if (e.target === ov) closePlayer(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !ov.hidden) closePlayer(); });
+
+function thumb(item, i, big, soonText) {
+  const id = media(item.url);
+  const t = el(id ? "button" : "div", "thumb" + (big ? " big" : ""));
+  t.style.setProperty("--h", (265 + i * 47) % 360);
+  if (id) {
+    t.type = "button";
+    t.setAttribute("aria-label", "Lire : " + item.title);
+    if (id.thumb) {
+      const img = el("img");
+      img.alt = ""; img.loading = "lazy";
+      img.src = id.thumb;
+      img.onerror = () => img.remove();
+      t.append(img);
+    }
+    if (id.src) {
+      const v = el("video");
+      v.src = id.src + "#t=0.5"; v.preload = "metadata"; v.muted = true; v.playsInline = true; v.tabIndex = -1;
+      t.append(v);
+    }
+    t.append(el("span", "play"));
+    t.onclick = () => {
+      const link = id.watch || item.url;
+      // Ouvert depuis un fichier local : YouTube refuse l’intégration, on ouvre donc la vidéo dans un onglet
+      if (!id.src && location.protocol === "file:") { window.open(link, "_blank", "noopener"); return; }
+      openPlayer(id, item.title, link);
+    };
+  } else {
+    t.append(el("span", "soon", soonText || "Vidéo à venir"));
+  }
+  return t;
+}
+function card(p, i) {
+  const a = el("article", "card");
+  a.append(thumb(p, i), el("h3", null, p.title));
+  if (p.role) a.append(el("p", "role", p.role));
+  if (p.desc) a.append(el("p", "desc", p.desc));
+  if (p.tags && p.tags.length) a.append(el("p", "tags", p.tags.join(", ")));
+  return a;
+}
+
+document.getElementById("tagline").textContent = CONFIG.tagline;
+document.getElementById("intro").textContent = CONFIG.intro;
+document.getElementById("year").textContent = new Date().getFullYear();
+
+
+
+
+
+const grid = document.getElementById("grid"), filters = document.getElementById("filters");
+const tags = ["Tout", "Ambiance", "Aura", "Combat"];
+let current = "Tout";
+function draw() {
+  const shown = PROJECTS
+    .map((p, i) => [p, i])
+    .filter(([p]) => current === "Tout" || (p.tags || []).includes(current));
+  if (!shown.length) {
+    grid.replaceChildren(el("p", "muted", current === "Tout" ? "Les premières vidéos arrivent bientôt." : "Pas encore de vidéo dans cette catégorie."));
+  } else {
+    grid.replaceChildren(...shown.map(([p, i]) => card(p, i)));
+  }
+  [...filters.children].forEach(b => b.setAttribute("aria-pressed", String(b.textContent === current)));
+}
+tags.forEach(t => {
+  const b = el("button", null, t);
+  b.type = "button";
+  b.onclick = () => { current = t; draw(); };
+  filters.append(b);
+});
+draw();
+
+const sv = document.getElementById("services");
+SERVICES.forEach(s => { const d = el("div"); d.append(el("h3", null, s.t), el("p", null, s.d)); sv.append(d); });
+
+const ct = document.getElementById("contact"), c = CONFIG.contact;
+function link(label, href) { const a = el("a", null, label); a.href = href; a.target = "_blank"; a.rel = "noopener"; ct.append(a); }
+if (c.discord) {
+  const b = el("button", "dc");
+  const lab = el("span", "dl", "Discord");
+  b.append(lab, el("span", "dh", c.discord));
+  b.type = "button";
+  b.onclick = () => {
+    try { navigator.clipboard.writeText(c.discord).then(() => { lab.textContent = "Copié !"; setTimeout(() => lab.textContent = "Discord", 1500); }); } catch (e) {}
+  };
+  ct.append(b);
+}
+if (c.email) link(c.email, "mailto:" + c.email);
+if (c.youtube) link("YouTube", c.youtube);
+if (c.twitter) link("Twitter / X", c.twitter);
+if (c.devforum) link("DevForum", c.devforum);
+if (!ct.children.length) ct.append(el("p", "muted", "Mes liens de contact arrivent bientôt."));
+</script>
+</body>
+</html>
