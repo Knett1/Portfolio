@@ -172,16 +172,61 @@ const PROJECTS = [
   tags: ["Ambiance"],
   desc: "Showcase d’ambiance d’Halloween."
   },
-  // Medal fonctionne aussi : colle le lien du clip tel quel.
-  // Modèle à copier pour chaque vidéo (tags conseillés : Aura, Ambiance, VFX, Combat) :
-  // Vidéo locale : { title: "…", url: "videos/mon-clip.mp4", tags: ["Aura"], desc: "…" },
-  // { title: "…", url: "https://youtu.be/…", tags: ["Aura"], role: "…", desc: "…" },
+  {
+  title: "Hiver",
+  url: "videos/snow.mp4",
+  tags: ["Ambiance"],
+  desc: "Showcase d’ambiance d’hiver."
+  },
+  {
+  title: "Désert",
+  url: "videos/desert.mp4",
+  tags: ["Ambiance"],
+  desc: "Showcase d’ambiance d’un désert."
+  },
+  {
+  title: "Pluie",
+  url: "videos/pluie.mp4",
+  tags: ["Ambiance"],
+  desc: "Showcase d’ambiance de pluie."
+  },
+  {
+  title: "Festival",
+  url: "videos/festival.mp4",
+  tags: ["Ambiance"],
+  desc: "Showcase d’ambiance d’un festival."
+  },
+  {
+  title: "Son réaction",
+  url: "videos/soundreaction.mp4",
+  tags: ["Misc"],
+  desc: "Showcase système de réaction au son."
+  },
+  {
+  title: "Timer",
+  url: "videos/timeraura.mp4",
+  tags: ["Aura"],
+  desc: "Showcase d’une aura timer."
+  },
+  {
+  title: "Demon",
+  url: "videos/demonaura.mp4",
+  tags: ["Aura"],
+  desc: "Showcase d’une aura demon."
+  },
+  {
+  title: "Hiver",
+  url: "videos/snowaura.mp4",
+  tags: ["Aura"],
+  desc: "Showcase d’une aura d'hiver."
+  },
 ];
 
 const SERVICES = [
   { t: "Auras", d: "Auras personnalisées et à votre guise. Elles sont travaillées à fond pour avoir le meilleur rendu." },
   { t: "Ambiances", d: "Brouillard, poussière en suspension, lucioles, lumière et post-traitement pour donner une atmosphère à un lieu." },
-  { t: "Combat", d: "VFX de combat synchronisés avec du son et des changements d’environnement. (Je ne fais pas les animations pour le moment.)" }
+  { t: "Combat", d: "VFX de combat synchronisés avec du son et des changements d’environnement. (Je ne fais pas les animations pour le moment.)" },
+  { t: "Misc", d: "Effets ponctuels et demandes particulières qui ne rentrent pas dans les autres catégories. Écris-moi pour en discuter." }
 ];
 
 /* ---------- Code de la page (rien à modifier en dessous) ---------- */
@@ -287,7 +332,7 @@ document.getElementById("year").textContent = new Date().getFullYear();
 
 
 const grid = document.getElementById("grid"), filters = document.getElementById("filters");
-const tags = ["Tout", "Ambiance", "Aura", "Combat"];
+const tags = ["Tout", "Ambiance", "Aura", "Combat", "Misc"];
 let current = "Tout";
 function draw() {
   const shown = PROJECTS
